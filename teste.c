@@ -378,7 +378,7 @@ scanf("%[^\n]s", send_data);
 while(i>=0){
 	for(j=0;j<MAX_USERS;j++){
 			if(contatos[j].validade==1 && strcmp(multName[i],contatos[j].name)==0){
-				send(connected[contatos[i].id],send_data,strlen(send_data), 0);
+				send(connected[contatos[j].id],send_data,strlen(send_data), 0);
 				printf("mensagen enviada para o usuario %s\n",contatos[j].name);	
 			}
 		}
