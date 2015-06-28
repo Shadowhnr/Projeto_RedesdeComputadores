@@ -270,7 +270,7 @@ while(1){
 		if(bytes_recv<1 ){
 		closeConnection(id);
 		}else{			
-                printf("mensagens recebida, contato %s: %s\n",contato[sIdconnect[id].contato],receveDate[id]);
+                printf("mensagens recebida, contato %s: %s\n",contato[sIdConnect[id].contato],receveDate[id]);
 		}
 	}
     }
