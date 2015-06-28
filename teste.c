@@ -203,7 +203,7 @@ char addServerName[512];
 }
 
 void enviar(){
-        int i;
+        int i,tam;
 	char name[150];
 	while(1){
 		printf("digite o nome do contato ou <sair>\n");
@@ -216,7 +216,8 @@ void enviar(){
 					printf("digite a mensagem \n");
 
 					getchar();
-					scanf("%[^\n]s", send_data);
+					tam=scanf("%[^\n]s", send_data);
+					send_data[tam]='\0';
 					send(connected[contatos[i].id],send_data,strlen(send_data), 0);
 					}			
 			}		
@@ -289,6 +290,7 @@ void removeContatos(){
         for(i=0;i<MAX_USERS;i++){
         if(contatos[i].status==1 && strcmp(name,contatos[i].name)==0){
 			strcpy(send_data,"exit");
+			send_data[4]='\0';
 			sleep(1);
 			send(connected[contatos[i].id],send_data,strlen(send_data), 0);
 			closeConnection(contatos[i].id);
@@ -312,15 +314,18 @@ void closeAllConnection(){
 
 void broadcast(){
   char send_data[1024];
-  int i;
+  int i,tam;
+  
   printf("\nbroadcast\n");
   printf("-------------------------\n");
   printf("digite a mensagen\n");
   getchar();
-  scanf("%[^\n]s", send_data);
+  tam=scanf("%[^\n]s", send_data);
+  send_data[tam]='\0';
   for(i=0;i<MAX_USERS;i++){
 			if(contatos[i].validade==1){
 				send(connected[contatos[i].id],send_data,strlen(send_data), 0);
+				
 				printf("mensagen enviada para o usuario %s\n",contatos[i].name);	
 			}	
   }
@@ -328,7 +333,7 @@ void broadcast(){
 void multcast(){
 char send_data[1024];
 char multName[MAX_USERS][150];
-int i=0,j;
+int i=0,j,tam;
   printf("\nmultcast\n");
   printf("-------------------------\n");
 
@@ -349,11 +354,13 @@ int i=0,j;
   i--;
   printf("digite a mensagen\n");
   getchar();
-scanf("%[^\n]s", send_data);
+tam=scanf("%[^\n]s", send_data);
+send_data[tam]='\0';
 while(i>=0){
 	for(j=0;j<MAX_USERS;j++){
 			if(contatos[j].validade==1 && strcmp(multName[i],contatos[j].name)==0){
 				send(connected[contatos[j].id],send_data,strlen(send_data), 0);
+
 				printf("mensagen enviada para o usuario %s\n",contatos[j].name);	
 			}
 		}
