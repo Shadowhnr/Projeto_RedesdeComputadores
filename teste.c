@@ -373,8 +373,7 @@ int i=0,j;
 	}
   i--;
   printf("digite a mensagen\n");
-  fflush(stdin);
-  fflush(stdout);
+  getchar();
 scanf("%[^\n]s", send_data);
 while(i>=0){
 	for(j=0;j<MAX_USERS;j++){
@@ -383,7 +382,7 @@ while(i>=0){
 				printf("mensagen enviada para o usuario %s\n",contatos[j].name);	
 			}
 		}
-	printf("usuario %s nao encontrado\n",multName[i]);
+
 	i--;
 	}
 	
