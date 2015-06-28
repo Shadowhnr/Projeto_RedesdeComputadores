@@ -303,9 +303,9 @@ void closeAllConnection(){
 	int i;	
 	for(i=0;i<MAX_USERS;i++){
 			if(sIdConnect[i].status==1){
-			closeConnection(i);
 			strcpy(send_data,"codigo para encerramento de conexao 1920394323");
 			send(connected[i],send_data,strlen(send_data), 0);
+			closeConnection(i);
 		}
 	}
 	
