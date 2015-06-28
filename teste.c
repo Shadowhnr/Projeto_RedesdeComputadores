@@ -9,7 +9,7 @@
 #include <unistd.h> // Define constantes POSIX
 #include <errno.h>  // Utilizado para capturar mensagens de erro
 #include <pthread.h>
-#define MAX_USERS 10
+#define MAX_USERS 20
 
 //lista de contatos
  struct {
