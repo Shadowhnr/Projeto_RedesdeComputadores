@@ -262,7 +262,7 @@ while(1){
 		if(tamRecv<1 || strcmp(receveDate[id],"exit")==0){
 		closeConnection(id);
 		}else{
-		receveDate[tamRecv]='\0';
+		receveDate[id][tamRecv]='\0';
                 printf("mensagens recebida, contato %s: %s\n",contatos[sIdConnect[id].contatos].name,receveDate[id]);
 		}
 	}
