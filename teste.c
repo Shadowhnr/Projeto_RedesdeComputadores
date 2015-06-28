@@ -332,6 +332,6 @@ while(1){
 	if(ctrl==2){enviar();}
 	if(ctrl==3){listarContatos();}
 	if(ctrl==4){removeContatos();}
-	if(ctrl==5){return 0;}
+	if(ctrl==5){closeAllConnection();return 0;}
 	}
 }
