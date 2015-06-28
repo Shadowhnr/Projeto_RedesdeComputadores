@@ -25,7 +25,7 @@
       int contatos;
 } sIdConnect[MAX_USERS];
 
-int i;
+
 	char name[150];
 //cliente 
   	struct hostent *cl_Host[MAX_USERS];
@@ -169,6 +169,7 @@ if (listen(sv_Sock, 10) == -1)
 }
 
 void adicionar(){
+int i;
 	for(i=0;i<MAX_USERS;i++){
 		if(contatos[i].validade==0){
 				printf("digite o nome\n");
@@ -196,6 +197,7 @@ void adicionar(){
 }
 
 void enviar(){
+        int i;
 	char name[150];
 	while(1){
 		printf("digite o nome do contato ou <sair>\n");
