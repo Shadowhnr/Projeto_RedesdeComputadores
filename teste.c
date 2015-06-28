@@ -47,11 +47,12 @@ int protocolClient(int i){
 
 //recebe o nome da maquina que solicitou conexao e o adiciona em contatos
 int protocolServer(int i){
-	int bytes_recv;
+	int tamRecv;
 	int k;
 	for(k=0;k<MAX_USERS;k++){
 		if(contatos[k].validade==0){
-				bytes_recv=recv(connected[i],contatos[k].name,1024,0);
+				tamRecv=recv(connected[i],contatos[k].name,1024,0);
+				contatos[k].name[tamRecv]='\0';
       				contatos[k].validade=1;
      				contatos[k].status=1;
 				contatos[k].id=i;
@@ -203,7 +204,7 @@ char addServerName[512];
 }
 
 void enviar(){
-        int i,tam;
+        int i;
 	char name[150];
 	while(1){
 		printf("digite o nome do contato ou <sair>\n");
@@ -216,8 +217,7 @@ void enviar(){
 					printf("digite a mensagem \n");
 
 					getchar();
-					tam=scanf("%[^\n]s", send_data);
-					send_data[tam]='\0';
+					scanf("%[^\n]s", send_data);
 					send(connected[contatos[i].id],send_data,strlen(send_data), 0);
 					}			
 			}		
@@ -252,17 +252,17 @@ void *receve()
 int id=x;
 x++;
 
-int bytes_recv;
+int tamRecv;
 while(1){		
 
 	if(sIdConnect[id].status==1){
 		
-		bytes_recv=recv(connected[id],receveDate[id],1024,0);
+		tamRecv=recv(connected[id],receveDate[id],1024,0);
 		
-		if(bytes_recv<1 || strcmp(receveDate[id],"exit")==0){
+		if(tamRecv<1 || strcmp(receveDate[id],"exit")==0){
 		closeConnection(id);
 		}else{
-		
+		receveDate[tamRecv]='\0';
                 printf("mensagens recebida, contato %s: %s\n",contatos[sIdConnect[id].contatos].name,receveDate[id]);
 		}
 	}
@@ -314,14 +314,13 @@ void closeAllConnection(){
 
 void broadcast(){
   char send_data[1024];
-  int i,tam;
+  int i;
   
   printf("\nbroadcast\n");
   printf("-------------------------\n");
   printf("digite a mensagen\n");
   getchar();
-  tam=scanf("%[^\n]s", send_data);
-  send_data[tam]='\0';
+  scanf("%[^\n]s", send_data);
   for(i=0;i<MAX_USERS;i++){
 			if(contatos[i].validade==1){
 				send(connected[contatos[i].id],send_data,strlen(send_data), 0);
@@ -333,7 +332,7 @@ void broadcast(){
 void multcast(){
 char send_data[1024];
 char multName[MAX_USERS][150];
-int i=0,j,tam;
+int i=0,j;
   printf("\nmultcast\n");
   printf("-------------------------\n");
 
@@ -354,8 +353,8 @@ int i=0,j,tam;
   i--;
   printf("digite a mensagen\n");
   getchar();
-tam=scanf("%[^\n]s", send_data);
-send_data[tam]='\0';
+  scanf("%[^\n]s", send_data);
+
 while(i>=0){
 	for(j=0;j<MAX_USERS;j++){
 			if(contatos[j].validade==1 && strcmp(multName[i],contatos[j].name)==0){
