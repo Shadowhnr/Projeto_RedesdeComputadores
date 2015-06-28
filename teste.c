@@ -258,7 +258,7 @@ while(1){
 	if(sIdConnect[id].status==1){
 		
 		tamRecv=recv(connected[id],receveDate[id],1024,0);
-		if(tamRecv>0){receveDate[id][tamRecv]='\0';}
+		receveDate[id][tamRecv]='\0';
 		if(tamRecv<1 || strcmp(receveDate[id],"exit")==0){
 		closeConnection(id);
 		}else{
