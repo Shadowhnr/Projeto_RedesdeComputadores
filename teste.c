@@ -288,7 +288,7 @@ void removeContatos(){
 	
         for(i=0;i<MAX_USERS;i++){
         if(contatos[i].status==1 && strcmp(name,contatos[i].name)==0){
-			strcpy(send_data,"");
+			strcpy(send_data,"teste");
 			sleep(1);
 			send(connected[contatos[i].id],send_data,strlen(send_data), 0);
 			closeConnection(contatos[i].id);
