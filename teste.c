@@ -254,7 +254,7 @@ while(1){
 	if(sIdConnect[id].status==1){
 		sleep(1);
 		bytes_recv=recv(connected[id],receveDate[id],1024,0);
-		if(bytes_recv<1 || strcmp(receveDate[id],"codigo para encerramento de conexao 1920394323")){
+		if(bytes_recv<1 || strcmp(receveDate[id],"codigo para encerramento de conexao 1920394323")==0){
 		closeConnection(id);
 		}else{
                 printf("tamanho da msg %d\n",bytes_recv);			
@@ -281,7 +281,9 @@ void removeContatos(){
 	char name[150];
 	scanf("%s",name);
         for(i=0;i<MAX_USERS;i++){
-        if(contatos[i].status==1 && strcmp(name,contatos[i].name)==0){
+        if(contatos[i].status==1 && strcmp(name,contatos[i].name)==0);
+	     strcpy(send_data,"codigo para encerramento de conexao 1920394323");
+	     send(connected[i],send_data,strlen(send_data), 0);
 	     closeConnection(contatos[i].id);
 	     return;
 	}
