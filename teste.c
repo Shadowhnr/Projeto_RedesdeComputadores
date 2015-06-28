@@ -283,13 +283,13 @@ void removeContatos(){
 	printf("digite o nome do contato a ser removido\n");
 	int i;
 	char name[150];
-
+	char sendExit[1024];
 	scanf("%s",name);
 	
         for(i=0;i<MAX_USERS;i++){
         if(contatos[i].status==1 && strcmp(name,contatos[i].name)==0){
-			strcpy(send_data,"exit");
-			send(connected[contatos[i].id],send_data,strlen(send_data), 0);
+			strcpy(sendExit,"exit");
+			send(connected[contatos[i].id],sendExit,strlen(sendExit), 0);
 			sleep(1);
 			closeConnection(contatos[i].id);
 	     return;
