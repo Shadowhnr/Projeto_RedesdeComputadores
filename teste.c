@@ -258,12 +258,12 @@ while(1){
 		
 		bytes_recv=recv(connected[id],receveDate[id],1024,0);
 		
-		if(bytes_recv<1 ){
+		if(bytes_recv<1 || strcmp(receveDate[id],"exit")==0){
 		closeConnection(id);
-		}
-		printf("tamanho da msg %d\n",bytes_recv);
-                printf("mensagens recebida, contato %s: %s\n",contatos[sIdConnect[id].contatos].name,receveDate[id]);
+		}else{
 		
+                printf("mensagens recebida, contato %s: %s\n",contatos[sIdConnect[id].contatos].name,receveDate[id]);
+		}
 	}
     }
 }
@@ -288,7 +288,7 @@ void removeContatos(){
 	
         for(i=0;i<MAX_USERS;i++){
         if(contatos[i].status==1 && strcmp(name,contatos[i].name)==0){
-			strcpy(send_data,"");
+			strcpy(send_data,"exit");
 			sleep(1);
 			send(connected[contatos[i].id],send_data,strlen(send_data), 0);
 			closeConnection(contatos[i].id);
