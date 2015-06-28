@@ -261,7 +261,7 @@ while(1){
 		if(bytes_recv<1 ){
 		closeConnection(id);
 		}
-		printf("tamanho da msg %s\n",bytes_recv);
+		printf("tamanho da msg %d\n",bytes_recv);
                 printf("mensagens recebida, contato %s: %s\n",contatos[sIdConnect[id].contatos].name,receveDate[id]);
 		
 	}
