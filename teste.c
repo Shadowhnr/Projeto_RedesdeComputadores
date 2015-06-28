@@ -297,6 +297,13 @@ void printMenu(){
 	printf("4 - remover contato\n");
 	printf("5 - sair\n");
 }
+void closeAllConnection(){
+	int i;	
+	for(i=0;i<MAX_USERS;i++){
+		closeConnection(i);
+	}
+	
+}
 int main(){
 int user;
 
