@@ -63,11 +63,7 @@ int protocolServer(int i){
 				printf("contato adicionado\n");
 				printf("------------------\n");
 				printf("nome %s\n",contatos[k].name);
-				printf("nome server %s\n",contatos[k].server_name);
-				printf("validade %d\n",contatos[k].validade);
 				printf("status %d\n",contatos[k].status);
-				printf("id %d\n",contatos[k].id);
-				printf("k %d\n",k);
 				printf("------------------\n");				
 				return 0;
 			}
@@ -197,11 +193,7 @@ char addServerName[512];
 				printf("contato adicionado\n");
 				printf("------------------\n");
 				printf("nome %s\n",contatos[i].name);
-				printf("nome server %s\n",contatos[i].server_name);
-				printf("validade %d\n",contatos[i].validade);
 				printf("status %d\n",contatos[i].status);
-				printf("id %d\n",contatos[i].id);
-				printf("i %d\n",i);
 				printf("------------------\n");
 
 				return;
@@ -268,9 +260,10 @@ while(1){
 		
 		if(bytes_recv<1 ){
 		closeConnection(id);
-		}else{			
-                printf("mensagens recebida, contato %s: %s\n",contatos[sIdConnect[id].contatos].name,receveDate[id]);
 		}
+		printf("tamanho da msg %s\n",bytes_recv);
+                printf("mensagens recebida, contato %s: %s\n",contatos[sIdConnect[id].contatos].name,receveDate[id]);
+		
 	}
     }
 }
