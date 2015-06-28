@@ -174,10 +174,10 @@ int i;
 char addName[150];  
 char addServerName[512];
 	printf("digite o nome\n");
-	//fgets(addName,150,stdin);
+
 	scanf("%s",addName);
 	printf("digite o IP\n");
-	//fgets(addServerName,512,stdin);
+
 	scanf("%s",addServerName);
 
 	for(i=0;i<MAX_USERS;i++){
@@ -215,7 +215,7 @@ void enviar(){
 	char name[150];
 	while(1){
 		printf("digite o nome do contato ou <sair>\n");
-		//fgets(name,150,stdin);
+
 		scanf("%s",name);
 		if(strcmp(name,"sair")==0){return;}
 		for(i=0;i<MAX_USERS;i++){
@@ -223,7 +223,6 @@ void enviar(){
 
 					printf("digite a mensagem \n");
 
-                                        //fgets(send_data, 1024, stdin);
 					getchar();
 					scanf("%[^\n]s", send_data);
 					send(connected[contatos[i].id],send_data,strlen(send_data), 0);
@@ -291,11 +290,13 @@ void removeContatos(){
 	printf("digite o nome do contato a ser removido\n");
 	int i;
 	char name[150];
-	//fgets(name,150,stdin);
+
 	scanf("%s",name);
 	
         for(i=0;i<MAX_USERS;i++){
         if(contatos[i].status==1 && strcmp(name,contatos[i].name)==0){
+			strcpy(send_data,"");
+			send(connected[contatos[i].id],send_data,strlen(send_data), 0);
 			closeConnection(contatos[i].id);
 	     return;
 	}
@@ -314,27 +315,7 @@ void closeAllConnection(){
 	}
 	
 }
-void exibirMsg(){
-	int i,j;
-	char exibirName[150];
-	while(1){
-		printf("exibir mensagens\n");
-		printf("-------------------------\n");
-		printf("digite o nome do usuario\n");
-		//fgets(exibirName,150,stdin);
-		scanf("%s",exibirName);
-		for(i=0;i<MAX_USERS;i++){
-			if(contatos[i].validade==1 && strcmp(exibirName,contatos[i].name)==0){
-				printf("\n\nmensagens do usuario %s\n",contatos[i].name);
-				printf("-------------------------\n");
-				for(j=0;j<10;j++){
-									
-				}
-					
-			}		
-		}
-	}
-}
+
 void broadcast(){
   char send_data[1024];
   int i;
@@ -358,13 +339,13 @@ int i=0,j;
   printf("-------------------------\n");
 
   printf("digite o nome de um usuario ou m para mandar a msg\n");
-  //fgets(multName[i],150,stdin);
+
   getchar();
   scanf("%s",multName[i]);
   while(strcmp(multName[i],"m") != 0){
 	printf("contato listado\n");
 	i++;
-	//fgets(multName[i],150,stdin);	
+
 	scanf("%s",multName[i]);
 	if(i>MAX_USERS){
 		printf("erro vetor de nomes excede a quantidade de usuarios");
@@ -400,7 +381,7 @@ for(user=0;user<MAX_USERS;user++){
 	}
 }
 printf("digite o nome da sua maquina\n");
-//fgets(name,150,stdin);
+
 scanf("%s",name);
 //threads para receber conexoes
 pthread_t connectThread;
@@ -417,20 +398,18 @@ while(1){
 	printf("2 - enviar mensagens\n");
 	printf("3 - exibir contatos online\n");
 	printf("4 - remover contato\n");
-	printf("5 - exibir mensagens antigas\n");
-	printf("6 - broadcast\n");
-	printf("7 - multcast\n");
-	printf("8 - sair\n");
-	//fgets(ctrl,150,stdin);	
+	printf("5 - broadcast\n");
+	printf("6 - multcast\n");
+	printf("7 - sair\n");
+	
 	scanf("%s",ctrl);
 
 	if(strcmp(ctrl,"1")==0){adicionar();}
 	if(strcmp(ctrl,"2")==0){enviar();}
 	if(strcmp(ctrl,"3")==0){listarContatos();}
 	if(strcmp(ctrl,"4")==0){removeContatos();}
-	if(strcmp(ctrl,"5")==0){exibirMsg();}
-	if(strcmp(ctrl,"6")==0){broadcast();}
-	if(strcmp(ctrl,"7")==0){multcast();}
-	if(strcmp(ctrl,"8")==0){closeAllConnection();return 0;}
+	if(strcmp(ctrl,"5")==0){broadcast();}
+	if(strcmp(ctrl,"6")==0){multcast();}
+	if(strcmp(ctrl,"7")==0){closeAllConnection();return 0;}
 	}
 }
