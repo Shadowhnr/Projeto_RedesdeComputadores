@@ -104,7 +104,8 @@ void client(int i){
    if (connect(connected[idConnect], (struct sockaddr *)&cl_Server_addr[idConnect], sizeof(struct sockaddr)) == -1)
    {
       perror("Erro de conexao verifique o ip do contato");
-      return;
+ 
+
    }  contatos[i].status=1;
       contatos[i].id=idConnect;
       sIdConnect[idConnect].status=1;
@@ -170,12 +171,25 @@ if (listen(sv_Sock, 10) == -1)
 
 void adicionar(){
 int i;
+char addName[150];  
+char addServerName[512];
+	printf("digite o nome\n");
+	//fgets(addName,150,stdin);
+	scanf("%s",addName);
+	printf("digite o IP\n");
+	//fgets(addServerName,512,stdin);
+	scanf("%s",addServerName);
+
+	for(i=0;i<MAX_USERS;i++){
+		if(strcmp(contatos[i].name,addName)==0 && contatos[i].validade==1){
+			printf("erro - nomes duplicados \n");
+			return;
+		}	
+	}
 	for(i=0;i<MAX_USERS;i++){
 		if(contatos[i].validade==0){
-				printf("digite o nome\n");
-				scanf("%s",contatos[i].name);
-				printf("digite o IP\n");
-				scanf("%s",contatos[i].server_name);			
+			        strcpy(contatos[i].name,addName);
+				strcpy(contatos[i].server_name,addServerName);
       				contatos[i].validade=1;
      				contatos[i].status=0;
 				client(i);//estabelece conexao
@@ -201,18 +215,17 @@ void enviar(){
 	char name[150];
 	while(1){
 		printf("digite o nome do contato ou <sair>\n");
+		//fgets(name,150,stdin);
 		scanf("%s",name);
 		if(strcmp(name,"sair")==0){return;}
 		for(i=0;i<MAX_USERS;i++){
 			if(strcmp(name,contatos[i].name)==0 && contatos[i].validade==1){
-					if(contatos[i].status==0){
-						//estabelece conexao
-						//client(idConnect);
-						}	
-					//envia mensagen
+
 					printf("digite a mensagem \n");
-                   // fgets(send_data, 1024, stdin);
-				scanf("%s",send_data);
+
+                                        //fgets(send_data, 1024, stdin);
+					getchar();
+					scanf("%[^\n]s", send_data);
 					send(connected[contatos[i].id],send_data,strlen(send_data), 0);
 					}			
 			}		
@@ -244,7 +257,6 @@ int x=0;
 void *receve()
 {
 
-sleep((x+1)/100);
 int id=x;
 x++;
 
@@ -252,8 +264,9 @@ int bytes_recv;
 while(1){		
 
 	if(sIdConnect[id].status==1){
-		sleep(1);
+		
 		bytes_recv=recv(connected[id],receveDate[id],1024,0);
+		
 		if(bytes_recv<1 || strcmp(receveDate[id],"codigo para encerramento de conexao 1920394323")==0){
 		closeConnection(id);
 		}else{
@@ -279,50 +292,124 @@ void removeContatos(){
 	printf("digite o nome do contato a ser removido\n");
 	int i;
 	char name[150];
+	//fgets(name,150,stdin);
 	scanf("%s",name);
+	
         for(i=0;i<MAX_USERS;i++){
         if(contatos[i].status==1 && strcmp(name,contatos[i].name)==0){
-	     strcpy(send_data,"codigo para encerramento de conexao 1920394323");
-	     send(connected[i],send_data,strlen(send_data), 0);
-	     closeConnection(contatos[i].id);
+	     		strcpy(send_data,"codigo para encerramento de conexao 1920394323");		
+			send(connected[i],send_data,strlen(send_data), 0);
+			sleep(2);
+			closeConnection(i);
 	     return;
-	     	
-	     }
 	}
+        
+   }
 printf("contato nao encontrado\n");
 
 }
-//graficos
-void printMenu(){
-        printf("Menu principal\n");
-	printf("1 - adicionar contatos\n");
-	printf("2 - enviar mensagens\n");
-	printf("3 - exibir contatos online\n");
-	printf("4 - remover contato\n");
-	printf("5 - sair\n");
-}
+
 void closeAllConnection(){
 	int i;	
 	for(i=0;i<MAX_USERS;i++){
 			if(sIdConnect[i].status==1){
-			strcpy(send_data,"codigo para encerramento de conexao 1920394323");
+
+			strcpy(send_data,"codigo para encerramento de conexao 1920394323");		
 			send(connected[i],send_data,strlen(send_data), 0);
+			sleep(0.025);
 			closeConnection(i);
 		}
 	}
 	
 }
+void exibirMsg(){
+	int i,j;
+	char exibirName[150];
+	while(1){
+		printf("exibir mensagens\n");
+		printf("-------------------------\n");
+		printf("digite o nome do usuario\n");
+		//fgets(exibirName,150,stdin);
+		scanf("%s",exibirName);
+		for(i=0;i<MAX_USERS;i++){
+			if(contatos[i].validade==1 && strcmp(exibirName,contatos[i].name)==0){
+				printf("\n\nmensagens do usuario %s\n",contatos[i].name);
+				printf("-------------------------\n");
+				for(j=0;j<10;j++){
+									
+				}
+					
+			}		
+		}
+	}
+}
+void broadcast(){
+  char send_data[1024];
+  int i;
+  printf("\nbroadcast\n");
+  printf("-------------------------\n");
+  printf("digite a mensagen\n");
+  getchar();
+  scanf("%[^\n]s", send_data);
+  for(i=0;i<MAX_USERS;i++){
+			if(contatos[i].validade==1){
+				send(connected[contatos[i].id],send_data,strlen(send_data), 0);
+				printf("mensagen enviada para o usuario %s\n",contatos[i].name);	
+			}	
+  }
+}
+void multcast(){
+char send_data[1024];
+char multName[MAX_USERS][150];
+int i=0,j;
+  printf("\nmultcast\n");
+  printf("-------------------------\n");
+
+  printf("digite o nome de um usuario ou m para mandar a msg\n");
+  //fgets(multName[i],150,stdin);
+  getchar();
+  scanf("%s",multName[i]);
+  while(strcmp(multName[i],"m") != 0){
+	printf("contato listado\n");
+	i++;
+	//fgets(multName[i],150,stdin);	
+	scanf("%s",multName[i]);
+	if(i>MAX_USERS){
+		printf("erro vetor de nomes excede a quantidade de usuarios");
+		return;		
+		}
+	}
+  i--;
+  printf("digite a mensagen\n");
+  fflush(stdin);
+  fflush(stdout);
+scanf("%[^\n]s", send_data);
+while(i>=0){
+	for(j=0;j<MAX_USERS;j++){
+			if(contatos[j].validade==1 && strcmp(multName[i],contatos[j].name)==0){
+				send(connected[contatos[i].id],send_data,strlen(send_data), 0);
+				printf("mensagen enviada para o usuario %s\n",contatos[j].name);	
+			}
+		}
+	printf("usuario %s nao encontrado\n",multName[i]);
+	i--;
+	}
+	
+}
+
 int main(){
 int user;
 
 //threads para receber mensagens
 pthread_t receveThread[MAX_USERS];
 for(user=0;user<MAX_USERS;user++){
+	sleep(0.01);
 	if(pthread_create(&receveThread[user], NULL,receve,NULL)) {
 	fprintf(stderr, "Error creating thread receve\n");
 	}
 }
 printf("digite o nome da sua maquina\n");
+//fgets(name,150,stdin);
 scanf("%s",name);
 //threads para receber conexoes
 pthread_t connectThread;
@@ -330,16 +417,29 @@ pthread_t connectThread;
 if(pthread_create(&connectThread, NULL,connectListen, NULL)) {
 	fprintf(stderr, "Error creating thread connect\n");
 	}
-int ctrl;
+char ctrl[150];
 //menu principal
 while(1){
-	printMenu();
-	scanf("%d",&ctrl);
+	
+ 	printf("Menu principal\n");
+	printf("1 - adicionar contatos\n");
+	printf("2 - enviar mensagens\n");
+	printf("3 - exibir contatos online\n");
+	printf("4 - remover contato\n");
+	printf("5 - exibir mensagens antigas\n");
+	printf("6 - broadcast\n");
+	printf("7 - multcast\n");
+	printf("8 - sair\n");
+	//fgets(ctrl,150,stdin);	
+	scanf("%s",ctrl);
 
-	if(ctrl==1){adicionar();}
-	if(ctrl==2){enviar();}
-	if(ctrl==3){listarContatos();}
-	if(ctrl==4){removeContatos();}
-	if(ctrl==5){closeAllConnection();return 0;}
+	if(strcmp(ctrl,"1")==0){adicionar();}
+	if(strcmp(ctrl,"2")==0){enviar();}
+	if(strcmp(ctrl,"3")==0){listarContatos();}
+	if(strcmp(ctrl,"4")==0){removeContatos();}
+	if(strcmp(ctrl,"5")==0){exibirMsg();}
+	if(strcmp(ctrl,"6")==0){broadcast();}
+	if(strcmp(ctrl,"7")==0){multcast();}
+	if(strcmp(ctrl,"8")==0){closeAllConnection();return 0;}
 	}
 }
